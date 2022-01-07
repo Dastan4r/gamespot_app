@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "68711525796",
+    "project_id": "gamespot-app-cea61",
+    "storage_bucket": "gamespot-app-cea61.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68711525796:android:a112661ed8767cfa8da531",
+        "android_client_info": {
+          "package_name": "com.example.gamespot_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "68711525796-htnp5qnudqb5am2pgn38o19kcvscgmr4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJB9rcFc0jJ1XVl36sAFe3g4CQnuXsURQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "68711525796-htnp5qnudqb5am2pgn38o19kcvscgmr4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "68711525796-85eds6hg4hd2t6pcfe5jnivb0q5i83fr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.gamespotApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

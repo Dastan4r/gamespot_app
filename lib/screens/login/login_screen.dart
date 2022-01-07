@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../login/signup_screen.dart';
+
 import '../../widgets/login/login_form.dart';
 import '../../widgets/app/custom_app_bar.dart';
 
@@ -28,7 +30,7 @@ class LoginScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Login or signup',
+              'Login',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 28,
@@ -38,12 +40,30 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Enter your email address to log in or sign up',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 13,
-              ),
+            Row(
+              children: [
+                const Text(
+                  'Enter your email address to log in or',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 13,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(SignupScreen.routeName);
+                  },
+                  child: const Text(
+                    'Sign up',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
             ),
             const SizedBox(
               height: 30,
