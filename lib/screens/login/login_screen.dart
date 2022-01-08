@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../login/signup_screen.dart';
+
+import '../../store/authentication.dart';
 
 import '../../widgets/login/login_form.dart';
 import '../../widgets/app/custom_app_bar.dart';
 
 class LoginScreen extends StatelessWidget {
-  static const routeName = '/';
+  static const routeName = '/login';
 
   const LoginScreen({Key? key}) : super(key: key);
+
+  applyLoginForm (String email, String password, BuildContext ctx) {
+    Provider.of<Authentication>(ctx, listen: false).login(email, password);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +75,7 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            const LoginForm(),
+            LoginForm(applyForm: applyLoginForm),
           ],
         ),
       ),

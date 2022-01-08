@@ -1,27 +1,38 @@
 import 'package:flutter/material.dart';
 
-import '../../screens/login/login_password_screen.dart';
 import '../../widgets/app/app-button.dart';
 
 class LoginForm extends StatefulWidget {
-  const LoginForm({Key? key}) : super(key: key);
+  final bool withPhoneButton;
+  final Function applyForm;
+
+  const LoginForm({
+    Key? key,
+    this.withPhoneButton = true,
+    required this.applyForm,
+  }) : super(key: key);
 
   @override
   _LoginFormState createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
-  late TextEditingController _controller;
+  Map<String, dynamic> formData = {'email': null, 'password': null};
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final focusPassword = FocusNode();
+
+  void _submitForm(ctx) {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      widget.applyForm(formData['email'], formData['password'], ctx);
+    }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    focusPassword.dispose();
     super.dispose();
   }
 
@@ -29,105 +40,120 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Form(
+        key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextFormField(
-              controller: _controller,
-              autofocus: false,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color.fromRGBO(118, 118, 128, 1),
-                hintText: 'Email',
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(
-                    color: Colors.transparent,
-                    width: 0.0,
+            SizedBox(
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color.fromRGBO(118, 118, 128, 1),
+                      hintText: 'Email',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.0,
+                        ),
+                      ),
+                      hintStyle: const TextStyle(
+                        fontSize: 17,
+                        color: Color.fromRGBO(235, 235, 245, 1),
+                      ),
+                      contentPadding: const EdgeInsets.all(16),
+                    ),
+                    validator: (String? value) {
+                      if (value != null && value.isNotEmpty) {
+                        if (!RegExp(
+                                r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                            .hasMatch(value)) {
+                          return 'This is not a valid email';
+                        }
+                      }
+                    },
+                    cursorColor: Theme.of(context).textTheme.headline1!.color,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.headline1!.color,
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    onSaved: (String? value) {
+                      formData['email'] = value;
+                    },
+                    onFieldSubmitted: (v) {
+                      FocusScope.of(context).requestFocus(focusPassword);
+                    },
                   ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(
-                    color: Colors.transparent,
-                    width: 0.0,
+                  const SizedBox(height: 15),
+                  TextFormField(
+                    focusNode: focusPassword,
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: const Color.fromRGBO(118, 118, 128, 1),
+                      hintText: 'Password',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.0,
+                        ),
+                      ),
+                      hintStyle: const TextStyle(
+                        fontSize: 17,
+                        color: Color.fromRGBO(235, 235, 245, 1),
+                      ),
+                      contentPadding: const EdgeInsets.all(16),
+                    ),
+                    obscureText: true,
+                    validator: (String? value) {
+                      if (value == null || value.isEmpty || value.length <= 5) {
+                        return 'Invalid password';
+                      }
+                    },
+                    onSaved: (String? value) {
+                      formData['password'] = value;
+                    },
+                    onFieldSubmitted: (String? value) {
+                      _submitForm(context);
+                    },
+                    cursorColor: Theme.of(context).textTheme.headline1!.color,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.headline1!.color,
+                    ),
+                    keyboardType: TextInputType.emailAddress,
                   ),
-                ),
-                hintStyle: const TextStyle(
-                  fontSize: 17,
-                  color: Color.fromRGBO(235, 235, 245, 1),
-                ),
-                contentPadding: const EdgeInsets.all(16),
+                ],
               ),
-              cursorColor: Theme.of(context).textTheme.headline1!.color,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.headline1!.color,
-              ),
-              keyboardType: TextInputType.emailAddress,
             ),
-            const _ActionButtons()
+            AppButton(
+              pressHandler: () {
+                _submitForm(context);
+              },
+              title: 'Continue',
+              type: 'light',
+            ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _ActionButtons extends StatelessWidget {
-  const _ActionButtons({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final secondButtonStyle = ElevatedButton.styleFrom(
-      primary: const Color.fromRGBO(44, 44, 46, 1),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-      ),
-    );
-
-    return Column(
-      children: [
-        AppButton(
-          pressHandler: () {
-            Navigator.of(context).pushNamed(LoginPasswordScreen.routeName);
-          },
-          title: 'Continue',
-          type: 'light',
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 10,
-          ),
-          child: Row(
-            children: const [
-              Expanded(
-                child: Divider(
-                  color: Colors.grey,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  'or',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              Expanded(
-                child: Divider(
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-        ),
-         AppButton(
-          pressHandler: () {
-            Navigator.of(context).pushNamed(LoginPasswordScreen.routeName);
-          },
-          title: 'Continue with Phone',
-          type: 'dark',
-        ),
-      ],
     );
   }
 }

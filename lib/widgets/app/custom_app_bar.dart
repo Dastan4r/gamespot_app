@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gamespot_app/screens/login/login_password_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../../screens/login/login_screen.dart';
+
+import '../../../store/authentication.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
@@ -28,10 +30,6 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle style = ElevatedButton.styleFrom(
-      primary: const Color.fromRGBO(0, 0, 0, 0),
-    );
-
     return AppBar(
       automaticallyImplyLeading: !widget.withoutBackButton,
       backgroundColor: Colors.black,
@@ -61,7 +59,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ],
              onSelected: (selectedValue) {
                 if (selectedValue == 'logout') {
-                   Navigator.of(context).pushNamedAndRemoveUntil(LoginScreen.routeName, (Route<dynamic> route) => false);
+                  Provider.of<Authentication>(context, listen: false).logout();
+                  //  Navigator.of(context).pushNamedAndRemoveUntil(LoginScreen.routeName, (Route<dynamic> route) => false);
                 }
             },
             icon: const Icon(
