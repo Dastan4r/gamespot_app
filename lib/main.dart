@@ -9,6 +9,7 @@ import 'screens/favorite/favorite.dart';
 import 'screens/settings/settings.dart';
 
 import 'store/authentication.dart';
+import 'store/games.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Authentication(),
+        ),
+        ChangeNotifierProvider.value(
+          value: GamesStore(),
         ),
       ],
       child: Consumer<Authentication>(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/app/custom_app_bar.dart';
 import '../../widgets/dashboard/search_form.dart';
@@ -11,6 +12,8 @@ import '../../widgets/dashboard/recomended_game_list.dart';
 import '../../models/game.dart';
 import '../../models/category.dart';
 import '../../models/recomended_game.dart';
+
+import '../../store/games.dart';
 
 final List<Game> preorderGames = [
   Game(image: 'assets/images/death-door-game.png', name: 'Death`s Door'),
@@ -160,11 +163,38 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-class _DiscoverBannerWidget extends StatelessWidget {
+class _DiscoverBannerWidget extends StatefulWidget {
   const _DiscoverBannerWidget({Key? key}) : super(key: key);
 
   @override
+  State<_DiscoverBannerWidget> createState() => _DiscoverBannerWidgetState();
+}
+
+class _DiscoverBannerWidgetState extends State<_DiscoverBannerWidget> {
+  bool isInit = true;
+  bool isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (isInit) {
+      setState(() {
+        isLoading = true;
+      });
+      Provider.of<GamesStore>(context).getTopGamesList().then((_) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+
+    isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final _loadTopTenGames = Provider.of<GamesStore>(context).topGamesList;
+
     return ConstrainedBox(
       constraints: const BoxConstraints(
         maxHeight: 150.0,
@@ -176,12 +206,49 @@ class _DiscoverBannerWidget extends StatelessWidget {
           width: 15,
         ),
         itemBuilder: (ctx, index) {
-          return Image.asset(
-            'assets/images/game-image.png',
-            width: MediaQuery.of(context).size.width / 2,
+          return Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  _loadTopTenGames[index].image,
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: 150,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width / 2,
+                      height: 150,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Positioned(
+                bottom: 3,
+                left: 5,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 2.1,
+                  child: Text(
+                    _loadTopTenGames[index].name,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           );
         },
-        itemCount: 5,
+        itemCount: _loadTopTenGames.length,
       ),
     );
   }
