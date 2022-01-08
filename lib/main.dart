@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import 'screens/login/login_screen.dart';
 import 'screens/dashboard/dashboard.dart';
 import 'screens/login/signup_screen.dart';
+import 'screens/cart/cart.dart';
+import 'screens/favorite/favorite.dart';
+import 'screens/settings/settings.dart';
 
 import 'store/authentication.dart';
 
@@ -42,6 +45,9 @@ class MyApp extends StatelessWidget {
               LoginScreen.routeName: (ctx) => const LoginScreen(),
               DashboardScreen.routeName: (ctx) => const DashboardScreen(),
               SignupScreen.routeName: (ctx) => const SignupScreen(),
+              CartScreen.routeName: (ctx) => const CartScreen(),
+              SettingsScreen.routeName: (ctx) => const SettingsScreen(),
+              FavoriteScreen.routeName: (ctx) => const FavoriteScreen(),
             },
           );
         },

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../screens/login/login_screen.dart';
+import '../../screens/cart/cart.dart';
+import '../../screens/favorite/favorite.dart';
+import '../../screens/settings/settings.dart';
 
 import '../../../store/authentication.dart';
 
@@ -44,24 +46,86 @@ class _CustomAppBarState extends State<CustomAppBar> {
       actions: [
         if (widget.withAction)
           PopupMenuButton(
-            padding: const EdgeInsets.all(0),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            elevation: 6,
+            color: Colors.black,
+            padding: const EdgeInsets.all(10),
             offset: const Offset(0, 50),
             itemBuilder: (ctx) => [
               PopupMenuItem(
-                child: Row(
-                  children: const [
-                    Icon(Icons.logout, color: Colors.black),
-                    Text('Logout'),
-                  ]
-                ),
+                child: Row(children: const [
+                  Icon(Icons.sell_outlined, color: Colors.white),
+                  SizedBox(width: 15),
+                  Text(
+                    'Cart',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ]),
+                value: 'cart',
+              ),
+              PopupMenuItem(
+                child: Row(children: const [
+                  Icon(Icons.favorite_outline, color: Colors.white),
+                  SizedBox(width: 15),
+                  Text(
+                    'Favorite',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ]),
+                value: 'favorite',
+              ),
+              PopupMenuItem(
+                child: Row(children: const [
+                  Icon(Icons.settings_outlined, color: Colors.white),
+                  SizedBox(width: 15),
+                  Text(
+                    'Settings',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ]),
+                value: 'settings',
+              ),
+              PopupMenuItem(
+                child: Row(children: const [
+                  Icon(Icons.logout, color: Colors.white),
+                  SizedBox(width: 15),
+                  Text(
+                    'Logout',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ]),
                 value: 'logout',
               ),
             ],
-             onSelected: (selectedValue) {
-                if (selectedValue == 'logout') {
+            onSelected: (selectedValue) {
+              switch (selectedValue) {
+                case 'cart':
+                  Navigator.of(context).pushNamed(CartScreen.routeName);
+                  break;
+                case 'favorite':
+                  Navigator.of(context).pushNamed(FavoriteScreen.routeName);
+                  break;
+                case 'settings':
+                  Navigator.of(context).pushNamed(SettingsScreen.routeName);
+                  break;
+                case 'logout':
                   Provider.of<Authentication>(context, listen: false).logout();
-                  //  Navigator.of(context).pushNamedAndRemoveUntil(LoginScreen.routeName, (Route<dynamic> route) => false);
-                }
+                  break;
+                default:
+                  Provider.of<Authentication>(context, listen: false).logout();
+              }
             },
             icon: const Icon(
               Icons.account_circle_outlined,

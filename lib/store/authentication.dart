@@ -5,13 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class Authentication with ChangeNotifier {
-  String _userEmail = '';
-  String _userPassword = '';
-
   String? _token;
-
-  set setUserEmail(email) => _userEmail = email;
-  set setUserPassword(password) => _userPassword = password;
 
   bool get isAuthenticated {
     return _token != null;
@@ -37,8 +31,6 @@ class Authentication with ChangeNotifier {
       final responseData = json.decode(response.body);
 
       _token = responseData['idToken'];
-
-      print(_token);
 
       notifyListeners();
     } catch (err) {
@@ -67,8 +59,6 @@ class Authentication with ChangeNotifier {
 
       _token = responseData['idToken'];
 
-      print(_token);
-
       notifyListeners();
     } catch (err) {
       print(err);
@@ -77,8 +67,6 @@ class Authentication with ChangeNotifier {
 
   void logout() {
     _token = null;
-
-    print(_token);
 
     notifyListeners();
   }
