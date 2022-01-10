@@ -8,6 +8,7 @@ import '../../widgets/dashboard/category_title.dart';
 import '../../widgets/dashboard/categories_list.dart';
 import '../../widgets/dashboard/useful_link_list.dart';
 import '../../widgets/dashboard/recomended_game_list.dart';
+import '../../widgets/dashboard/discover_banner.dart';
 
 import '../../models/game.dart';
 import '../../models/category.dart';
@@ -16,17 +17,17 @@ import '../../models/recomended_game.dart';
 import '../../store/games.dart';
 
 final List<Game> preorderGames = [
-  Game(image: 'assets/images/death-door-game.png', name: 'Death`s Door'),
-  Game(image: 'assets/images/dying-light-game.png', name: 'Dying Light 2'),
-  Game(image: 'assets/images/death-door-game.png', name: 'Death`s Door'),
-  Game(image: 'assets/images/dying-light-game.png', name: 'Dying Light 2'),
+  Game(image: 'assets/images/death-door-game.png', name: 'Death`s Door', id: 10),
+  Game(image: 'assets/images/dying-light-game.png', name: 'Dying Light 2', id: 10),
+  Game(image: 'assets/images/death-door-game.png', name: 'Death`s Door', id: 10),
+  Game(image: 'assets/images/dying-light-game.png', name: 'Dying Light 2', id: 10),
 ];
 
 final List<Game> popularGames = [
-  Game(image: 'assets/images/death-loop-game.png', name: 'Deathloop'),
-  Game(image: 'assets/images/far-cry-game.png', name: 'Farcry 6'),
-  Game(image: 'assets/images/death-loop-game.png', name: 'Deathloop'),
-  Game(image: 'assets/images/far-cry-game.png', name: 'Farcry 6'),
+  Game(image: 'assets/images/death-loop-game.png', name: 'Deathloop', id: 10),
+  Game(image: 'assets/images/far-cry-game.png', name: 'Farcry 6', id: 10),
+  Game(image: 'assets/images/death-loop-game.png', name: 'Deathloop', id: 10),
+  Game(image: 'assets/images/far-cry-game.png', name: 'Farcry 6', id: 10),
 ];
 
 final List<Category> popularCategories = [
@@ -44,24 +45,24 @@ final List<Category> popularCollections = [
 ];
 
 final List<Game> recentlyUpdatedGames = [
-  Game(image: 'assets/images/squadrons-game.png', name: 'SW: Squadrons'),
-  Game(image: 'assets/images/hitman-game.png', name: 'Hitman 3'),
-  Game(image: 'assets/images/squadrons-game.png', name: 'SW: Squadrons'),
-  Game(image: 'assets/images/hitman-game.png', name: 'Hitman 3'),
+  Game(image: 'assets/images/squadrons-game.png', name: 'SW: Squadrons', id: 10),
+  Game(image: 'assets/images/hitman-game.png', name: 'Hitman 3', id: 10),
+  Game(image: 'assets/images/squadrons-game.png', name: 'SW: Squadrons', id: 10),
+  Game(image: 'assets/images/hitman-game.png', name: 'Hitman 3', id: 10),
 ];
 
 final List<Game> mostPopularGames = [
-  Game(image: 'assets/images/back-blood-game.png', name: 'Back for Blood'),
-  Game(image: 'assets/images/spider-man-game.png', name: 'Spider-man'),
-  Game(image: 'assets/images/back-blood-game.png', name: 'Back for Blood'),
-  Game(image: 'assets/images/spider-man-game.png', name: 'Spider-man'),
+  Game(image: 'assets/images/back-blood-game.png', name: 'Back for Blood', id: 10),
+  Game(image: 'assets/images/spider-man-game.png', name: 'Spider-man', id: 10),
+  Game(image: 'assets/images/back-blood-game.png', name: 'Back for Blood', id: 10),
+  Game(image: 'assets/images/spider-man-game.png', name: 'Spider-man', id: 10),
 ];
 
 final List<Game> playWithFriendsGames = [
-  Game(image: 'assets/images/fifa-game.png', name: 'Fifa 22'),
-  Game(image: 'assets/images/takes-two-game.png', name: 'It Takes Two'),
-  Game(image: 'assets/images/fifa-game.png', name: 'Fifa 22'),
-  Game(image: 'assets/images/takes-two-game.png', name: 'It Takes Two'),
+  Game(image: 'assets/images/fifa-game.png', name: 'Fifa 22', id: 10),
+  Game(image: 'assets/images/takes-two-game.png', name: 'It Takes Two', id: 10),
+  Game(image: 'assets/images/fifa-game.png', name: 'Fifa 22', id: 10),
+  Game(image: 'assets/images/takes-two-game.png', name: 'It Takes Two', id: 10),
 ];
 
 final List<RecomendedGame> recomendedGames = [
@@ -115,7 +116,7 @@ class DashboardScreen extends StatelessWidget {
               children: [
                 const SearchFormWidget(),
                 const SizedBox(height: 20),
-                const _DiscoverBannerWidget(),
+                const DiscoverBannerWidget(),
                 const SizedBox(height: 20),
                 const CategoryTitleWidget(
                   title: 'Pre-order',
@@ -158,97 +159,6 @@ class DashboardScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _DiscoverBannerWidget extends StatefulWidget {
-  const _DiscoverBannerWidget({Key? key}) : super(key: key);
-
-  @override
-  State<_DiscoverBannerWidget> createState() => _DiscoverBannerWidgetState();
-}
-
-class _DiscoverBannerWidgetState extends State<_DiscoverBannerWidget> {
-  bool isInit = true;
-  bool isLoading = false;
-
-  @override
-  void didChangeDependencies() {
-    if (isInit) {
-      setState(() {
-        isLoading = true;
-      });
-      Provider.of<GamesStore>(context).getTopGamesList().then((_) {
-        setState(() {
-          isLoading = false;
-        });
-      });
-    }
-
-    isInit = false;
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final _loadTopTenGames = Provider.of<GamesStore>(context).topGamesList;
-
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxHeight: 150.0,
-      ),
-      child: ListView.separated(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        separatorBuilder: (BuildContext context, int index) => const SizedBox(
-          width: 15,
-        ),
-        itemBuilder: (ctx, index) {
-          return Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  _loadTopTenGames[index].image,
-                  width: MediaQuery.of(context).size.width / 2,
-                  height: 150,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return SizedBox(
-                      width: MediaQuery.of(context).size.width / 2,
-                      height: 150,
-                      child: const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Positioned(
-                bottom: 3,
-                left: 5,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2.1,
-                  child: Text(
-                    _loadTopTenGames[index].name,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-        itemCount: _loadTopTenGames.length,
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'screens/login/signup_screen.dart';
 import 'screens/cart/cart.dart';
 import 'screens/favorite/favorite.dart';
 import 'screens/settings/settings.dart';
+import 'screens/game_detail/game_detail.dart';
 
 import 'store/authentication.dart';
 import 'store/games.dart';

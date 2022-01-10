@@ -32,6 +32,8 @@ dependencies:
   http: ^0.13.4
   provider: ^6.0.2
   firebase_auth: ^3.3.4
+  flutter_html: ^2.2.1
+  video_player: ^2.2.10
 
 
   # The following adds the Cupertino Icons font to your application.
