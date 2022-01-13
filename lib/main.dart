@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
               CartScreen.routeName: (ctx) => const CartScreen(),
               SettingsScreen.routeName: (ctx) => const SettingsScreen(),
               FavoriteScreen.routeName: (ctx) => const FavoriteScreen(),
+              GameDetailScreen.routeName: (ctx) => const GameDetailScreen(),
             },
           );
         },

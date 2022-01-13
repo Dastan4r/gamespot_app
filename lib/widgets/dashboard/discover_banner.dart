@@ -51,12 +51,7 @@ class DiscoverBannerWidgetState extends State<DiscoverBannerWidget> {
         itemBuilder: (ctx, index) {
           return GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GameDetailScreen(id: _loadTopTenGames[index].id),
-                ),
-              );
+              Navigator.of(context).pushNamed(GameDetailScreen.routeName, arguments: _loadTopTenGames[index].id);
             },
             child: Stack(
               children: [

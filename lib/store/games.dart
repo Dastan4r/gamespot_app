@@ -9,14 +9,14 @@ import '../models/game_detail.dart';
 class GamesStore with ChangeNotifier {
   List<Game> _topGamesList = [];
 
-  GameDetailModel? currentGame;
+  GameDetailModel? _currentGame;
 
   get topGamesList {
     return [..._topGamesList];
   }
 
   get getCurrentGame {
-    return currentGame;
+    return _currentGame;
   }
 
   Future<void> getTopGamesList() async {
@@ -25,7 +25,7 @@ class GamesStore with ChangeNotifier {
         'https://api.rawg.io/api/games?key=bc6af68897534358b5aec1e1b6475f82&page_size=10',
       );
 
-      final response = await http.get(url);
+      http.Response response = await http.get(url);
       final responseData = json.decode(response.body);
       final loadedResults = responseData['results'] as List;
 
@@ -55,7 +55,7 @@ class GamesStore with ChangeNotifier {
         'https://api.rawg.io/api/games/$gameId?key=bc6af68897534358b5aec1e1b6475f82',
       );
 
-      final response = await http.get(url);
+      http.Response response = await http.get(url);
       final responseData = json.decode(response.body);
       final responsePlatforms = responseData["platforms"] as List;
 
@@ -69,7 +69,7 @@ class GamesStore with ChangeNotifier {
         'https://api.rawg.io/api/games/$gameId/screenshots?key=bc6af68897534358b5aec1e1b6475f82&page_size=10',
       );
 
-      final screenshotResponse = await http.get(screenshotsUrl);
+      http.Response screenshotResponse = await http.get(screenshotsUrl);
       final screenshotResponseDecode = json.decode(screenshotResponse.body);
       final screenshotsDecoded = screenshotResponseDecode['results'] as List;
 
@@ -79,24 +79,25 @@ class GamesStore with ChangeNotifier {
         availableScreenshots.add(element['image']);
       }
 
-      final trailerUrl = Uri.parse(
-        'https://api.rawg.io/api/games/$gameId/movies?key=bc6af68897534358b5aec1e1b6475f82&page_size=1',
-      );
+      // final trailerUrl = Uri.parse(
+      //   'https://api.rawg.io/api/games/$gameId/movies?key=bc6af68897534358b5aec1e1b6475f82&page_size=1',
+      // );
 
-      final trailerResponse = await http.get(trailerUrl);
-      final trailerResponseDecode = json.decode(trailerResponse.body);
-      final trailerDecoded = trailerResponseDecode['results'];
+      // http.Response trailerResponse = await http.get(trailerUrl);
+      // final trailerResponseDecode = json.decode(trailerResponse.body);
+      // final trailerDecoded = trailerResponseDecode['results'];
 
-      currentGame = GameDetailModel(
+      GameDetailModel newGame = GameDetailModel(
         id: responseData['id'],
         name: responseData['name'],
         description: responseData['description'],
         screenshots: availableScreenshots,
-        trailer: trailerDecoded[0]['data']['480'] ?? '' ,
         metacriticRating: responseData['metacritic'],
         availablePlatforms: availablePlatforms,
         image: responseData['background_image'],
       );
+
+      _currentGame = newGame;
 
       notifyListeners();
     } catch (err) {

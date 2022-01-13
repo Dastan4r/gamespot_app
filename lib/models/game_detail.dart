@@ -3,7 +3,7 @@ class GameDetailModel {
   final String name;
   final String description;
   final List<String> screenshots;
-  final String trailer;
+  // final String trailer;
   final int metacriticRating;
   final List<String> availablePlatforms;
   final String image;
@@ -13,7 +13,7 @@ class GameDetailModel {
     required this.name,
     required this.description,
     required this.screenshots,
-    required this.trailer,
+    // required this.trailer,
     required this.metacriticRating,
     required this.availablePlatforms,
     required this.image,
