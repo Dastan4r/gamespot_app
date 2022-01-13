@@ -16,13 +16,6 @@ import '../../models/recomended_game.dart';
 
 import '../../store/games.dart';
 
-final List<Game> preorderGames = [
-  Game(image: 'assets/images/death-door-game.png', name: 'Death`s Door', id: 10),
-  Game(image: 'assets/images/dying-light-game.png', name: 'Dying Light 2', id: 10),
-  Game(image: 'assets/images/death-door-game.png', name: 'Death`s Door', id: 10),
-  Game(image: 'assets/images/dying-light-game.png', name: 'Dying Light 2', id: 10),
-];
-
 final List<Game> popularGames = [
   Game(image: 'assets/images/death-loop-game.png', name: 'Deathloop', id: 10),
   Game(image: 'assets/images/far-cry-game.png', name: 'Farcry 6', id: 10),
@@ -92,13 +85,40 @@ final List<RecomendedGame> recomendedGames = [
   ),
 ];
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   static const routeName = 'Dashboard';
 
   const DashboardScreen({Key? key}) : super(key: key);
 
   @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  bool isInit = true;
+  bool isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (isInit) {
+      setState(() {
+        isLoading = true;
+      });
+      Provider.of<GamesStore>(context).getPreorderGames().then((_) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    }
+
+    isInit = false;
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final preorderGames = Provider.of<GamesStore>(context).preorderGamesList;
+
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Discover',
@@ -130,31 +150,31 @@ class DashboardScreen extends StatelessWidget {
                   title: 'Popular',
                   link: 'See all',
                 ),
-                GamesListWidget(games: popularGames),
-                const CategoryTitleWidget(title: 'Browse by category'),
-                CategoriesListWidget(categories: popularCategories),
-                const CategoryTitleWidget(title: 'You might like'),
-                RecomendedGameListWidget(recomendedGames: recomendedGames),
-                const CategoryTitleWidget(
-                  title: 'Recently Updated',
-                  link: 'See all',
-                ),
-                GamesListWidget(games: recentlyUpdatedGames),
-                const CategoryTitleWidget(
-                  title: 'Most Popular',
-                  link: 'See all',
-                ),
-                GamesListWidget(games: mostPopularGames),
-                const CategoryTitleWidget(title: 'Game collections'),
-                CategoriesListWidget(categories: popularCollections),
-                const CategoryTitleWidget(
-                  title: 'Play with Friends',
-                  link: 'See all',
-                ),
-                GamesListWidget(games: playWithFriendsGames),
-                const CategoryTitleWidget(title: 'Useful links'),
-                const UsefulLinksListWidget(),
-                const SizedBox(height: 20),
+                // GamesListWidget(games: popularGames),
+                // const CategoryTitleWidget(title: 'Browse by category'),
+                // CategoriesListWidget(categories: popularCategories),
+                // const CategoryTitleWidget(title: 'You might like'),
+                // RecomendedGameListWidget(recomendedGames: recomendedGames),
+                // const CategoryTitleWidget(
+                //   title: 'Recently Updated',
+                //   link: 'See all',
+                // ),
+                // GamesListWidget(games: recentlyUpdatedGames),
+                // const CategoryTitleWidget(
+                //   title: 'Most Popular',
+                //   link: 'See all',
+                // ),
+                // GamesListWidget(games: mostPopularGames),
+                // const CategoryTitleWidget(title: 'Game collections'),
+                // CategoriesListWidget(categories: popularCollections),
+                // const CategoryTitleWidget(
+                //   title: 'Play with Friends',
+                //   link: 'See all',
+                // ),
+                // GamesListWidget(games: playWithFriendsGames),
+                // const CategoryTitleWidget(title: 'Useful links'),
+                // const UsefulLinksListWidget(),
+                // const SizedBox(height: 20),
               ],
             ),
           ),

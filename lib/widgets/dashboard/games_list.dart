@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../models/game.dart';
+
+import '../../screens/game_detail/game_detail.dart';
 
 class GamesListWidget extends StatelessWidget {
   final List<Game> games;
@@ -16,7 +19,7 @@ class GamesListWidget extends StatelessWidget {
         const SizedBox(height: 15),
         ConstrainedBox(
           constraints: const BoxConstraints(
-            maxHeight: 170.0,
+            maxHeight: 140.0,
           ),
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
@@ -25,28 +28,60 @@ class GamesListWidget extends StatelessWidget {
               width: 15,
             ),
             itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    games[index].image,
-                    width: MediaQuery.of(context).size.width / 3,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    games[index].name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    GameDetailScreen.routeName,
+                    arguments: games[index].id,
+                  );
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(
+                        games[index].image,
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: 110,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: 110,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  )
-                ],
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 2,
+                      child: Text(
+                        games[index].name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                  ],
+                ),
               );
             },
             itemCount: games.length,
           ),
         ),
-        const SizedBox(height: 10,)
+        const SizedBox(
+          height: 10,
+        )
       ],
     );
   }

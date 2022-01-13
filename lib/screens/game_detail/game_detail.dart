@@ -21,7 +21,8 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
 
   @override
   void didChangeDependencies() {
-    int gameId = ModalRoute.of(context)!.settings.arguments as int;
+    final gameId = ModalRoute.of(context)!.settings.arguments as int;
+
     if (isInit) {
       setState(() {
         isLoading = true;
@@ -123,27 +124,28 @@ class _GameDetailScreenState extends State<GameDetailScreen> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Metacritic rating',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                      if (currentGame.metacriticRating)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Metacritic rating',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          Text(
-                            '${currentGame.metacriticRating}/100',
-                            style: const TextStyle(
-                              color: Colors.yellow,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        ],
-                      ),
+                            Text(
+                              '${currentGame.metacriticRating}/100',
+                              style: const TextStyle(
+                                color: Colors.yellow,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
                       const SizedBox(height: 15),
                       const Align(
                         alignment: Alignment.centerLeft,

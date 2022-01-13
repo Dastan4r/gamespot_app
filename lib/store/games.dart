@@ -8,11 +8,16 @@ import '../models/game_detail.dart';
 
 class GamesStore with ChangeNotifier {
   List<Game> _topGamesList = [];
+  List<Game> _preorderGamesList = [];
 
   GameDetailModel? _currentGame;
 
   get topGamesList {
     return [..._topGamesList];
+  }
+
+  get preorderGamesList {
+    return [..._preorderGamesList];
   }
 
   get getCurrentGame {
@@ -98,6 +103,36 @@ class GamesStore with ChangeNotifier {
       );
 
       _currentGame = newGame;
+
+      notifyListeners();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+    Future<void> getPreorderGames() async {
+    try {
+      final url = Uri.parse(
+        'https://api.rawg.io/api/games?key=bc6af68897534358b5aec1e1b6475f82&page_size=10&dates=2022-01-15,2022-12-31',
+      );
+
+      http.Response response = await http.get(url);
+      final responseData = json.decode(response.body);
+      final loadedResults = responseData['results'] as List;
+
+      final List<Game> loadedGames = [];
+
+      for (var item in loadedResults) {
+        loadedGames.add(
+          Game(
+            image: item['background_image'],
+            name: item['name'],
+            id: item['id'],
+          ),
+        );
+      }
+
+      _preorderGamesList = loadedGames;
 
       notifyListeners();
     } catch (err) {
